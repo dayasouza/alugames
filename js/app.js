@@ -1,17 +1,37 @@
+function confirmarDevolucao(nomeJogo) {
+    return confirm(`Tem certeza de que deseja devolver o jogo ${nomeJogo}?`);
+}
 function alterarStatus(id) {
-    let botao = document
-        .getElementById("game-${id}")
-        .querySelector(".dashboard__item__button");
+    let gameClicado = document.getElementById(`game-${id}`);
+    let imagem = gameClicado.querySelector('.dashboard__item__img');
+    let botao = gameClicado.querySelector('.dashboard__item__button');
+    let nomeJogo = gameClicado.querySelector('.dashboard__item__name');
 
     if (botao.textContent === "Alugar") {
         botao.textContent = "Devolver";
         botao.classList.add("dashboard__item__button--return");
-        botao.parentElement
-            .querySelector(".dashboard__item__img")
-            .classList.add("dashboard__item__img--rented");
+        imagem.classList.add("dashboard__item__img--rented");
+        contarJogosAlugados();
     } else {
-        botao.textContent = "Alugar";
-botao.classList.remove("dashboard__item__button--return");
-botao.parentElement.querySelector('.dashboard__item__img').classList.remove('dashboard__item__img--rented');
+        if (confirmarDevolucao(nomeJogo.textContent)) {
+            botao.textContent = "Alugar";
+            botao.classList.remove("dashboard__item__button--return");
+            imagem.classList.remove("dashboard__item__img--rented");
+            contarJogosAlugados();
+        }
     }
+}
+
+function contarJogosAlugados() {
+    const listaJogos = document.querySelectorAll('.dashboard__items__item');
+    let contador = 0;
+
+    listaJogos.forEach(function(jogo) {
+        const botao = jogo.querySelector('.dashboard__item__button');
+        if (botao.textContent === "Devolver") {
+            contador++;
+        }
+    });
+
+    console.log(`Total de jogos alugados: ${contador}`);
 }
